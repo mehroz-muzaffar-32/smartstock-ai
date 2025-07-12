@@ -7,6 +7,8 @@ import logging
 import numpy as np
 import re
 from typing import List, Dict
+from models import db, InventoryUpload, InventoryItem
+from flask_login import current_user
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -69,12 +71,37 @@ class OCRProcessor:
             # Log if no items were found
             if not items:
                 self.logger.warning(f"No items found in image {image_path}")
+                return None, None
+                
+            # Save to database
+            if not current_user.is_authenticated:
+                self.logger.error("User must be authenticated to save upload")
+                return None, None
+                
+            # Create upload record
+            upload = InventoryUpload(
+                user_id=current_user.id,
+                filename=os.path.basename(image_path)
+            )
+            db.session.add(upload)
             
-            return items
+            # Create items
+            for item in items:
+                inventory_item = InventoryItem(
+                    upload=upload,
+                    name=item['name'],
+                    quantity=item['quantity']
+                )
+                db.session.add(inventory_item)
+                
+            db.session.commit()
+            
+            return items, upload.id
             
         except Exception as e:
             self.logger.error(f"Error processing image {image_path}: {str(e)}")
-            return []
+            db.session.rollback()
+            return None, None
 
 # Singleton instance
 ocr_processor = OCRProcessor()
