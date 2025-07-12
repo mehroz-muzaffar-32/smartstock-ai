@@ -1,8 +1,10 @@
 Flask==2.3.3
 Pillow==10.3.0
+opencv-python==4.6.0.66
 paddlepaddle==2.6.1
 paddleocr==2.7.3
 twilio==8.11.0
 python-dotenv==1.0.1
 numpy==1.26.4
+google-genai==1.25.0
 setuptools>=65.5.0
