@@ -1,6 +1,6 @@
 Flask==2.3.3
-Pillow==10.3.0
-paddlepaddle==2.6.1
+Pillow>=10.4.0
+paddlepaddle>=2.6.1
 paddleocr==2.7.3
 twilio==8.11.0
 python-dotenv==1.0.1
