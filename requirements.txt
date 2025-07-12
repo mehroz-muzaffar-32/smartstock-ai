@@ -1,7 +1,8 @@
 Flask==2.3.3
-Pillow==10.0.0
-paddlepaddle==2.5.1
-paddleocr==2.0.87
+Pillow==10.3.0
+paddlepaddle==2.6.1
+paddleocr==2.7.3
 twilio==8.11.0
-python-dotenv==0.21.1
-numpy==1.24.3
+python-dotenv==1.0.1
+numpy==1.26.4
+setuptools>=65.5.0
