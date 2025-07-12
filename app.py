@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, jsonify
+from flask_login import LoginManager, login_required, current_user
 from werkzeug.utils import secure_filename
 import os
+import logging
 from dotenv import load_dotenv
+from models import db, User
 from ocr.ocr_processor import process_image
 from logic.reorder_logic import generate_reorder_suggestions
 from messaging.whatsapp import send_whatsapp_message
@@ -11,11 +14,24 @@ load_dotenv()
 
 # Initialize Flask application
 app = Flask(__name__)
-
-# Configuration settings
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-change-in-production')
 app.config['UPLOAD_FOLDER'] = 'uploads'  # Store uploaded files
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload size
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}  # Permitted image formats
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize database
+db.init_app(app)
+
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'auth.login'
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 # Create upload directory if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -29,11 +45,13 @@ def validate_phone_number(phone_number):
     return phone_number and len(phone_number) >= 10  # Basic length check
 
 @app.route('/')
+@login_required
 def index():
     #Main index page.
     return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
+@login_required
 def upload():
     #Handle file upload and processing.
     # Validate request contains multipart form data
@@ -104,6 +122,11 @@ def upload():
         app.logger.error(f"Upload processing error: {str(e)}")
         return jsonify({'error': 'An unexpected error occurred during processing'}), 500
 
+# Register blueprints
+from auth.routes import auth
+app.register_blueprint(auth, url_prefix='/auth')
+
 if __name__ == '__main__':
-    # Run the application in debug mode
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)

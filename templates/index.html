@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiryana Store Reorder Assistant</title>
-    <!-- Using Tailwind CSS via CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
+{% extends "base.html" %}
+
+{% block title %}Kiryana Store Reorder Assistant{% endblock %}
+
+{% block content %}
     <!--Hamza Asif: Error Message Container (hidden by default) -->
     <!-- Positioned fixed at top-right corner -->
     <div id="errorBox" class="hidden fixed top-4 right-4 z-50 w-full max-w-md">
@@ -159,5 +154,4 @@
             }
         }, 5000);
     </script>
-</body>
-</html>
+{% endblock %}
