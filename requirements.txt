@@ -1,0 +1,7 @@
+Flask==2.3.3
+Pillow==10.0.0
+paddlepaddle==2.5.1
+paddleocr==2.0.87
+twilio==8.11.0
+python-dotenv==0.21.1
+numpy==1.24.3
