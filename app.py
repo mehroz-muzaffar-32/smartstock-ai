@@ -13,7 +13,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Configuration settings
-app.config['UPLOAD_FOLDER'] = 'uploads'  # Directory to store uploaded files
+app.config['UPLOAD_FOLDER'] = 'uploads'  # Store uploaded files
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload size
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}  # Permitted image formats
 
@@ -21,39 +21,21 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}  # Permitted im
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 def allowed_file(filename):
-    """Check if the file has an allowed extension.
-    Args:
-        filename (str): Name of the uploaded file
-    Returns:
-        bool: True if extension is allowed, False otherwise
-    """
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+    #Hamza Asif: Check if file has an allowed extension.
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 def validate_phone_number(phone_number):
-    """Basic phone number validation.
-    Args:
-        phone_number (str): Phone number to validate
-    Returns:
-        bool: True if number meets minimum requirements
-    """
-    # Implement proper validation based on your requirements
+    #Basic phone number validation.
     return phone_number and len(phone_number) >= 10  # Basic length check
 
 @app.route('/')
 def index():
-    """Render the main index page.
-    Returns:
-        Rendered HTML template
-    """
+    #Main index page.
     return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    """Handle file upload and processing.
-    Returns:
-        JSON response with processing results or error message
-    """
+    #Handle file upload and processing.
     # Validate request contains multipart form data
     if not request.content_type or 'multipart/form-data' not in request.content_type:
         return jsonify({'error': 'Request must be multipart/form-data'}), 400
