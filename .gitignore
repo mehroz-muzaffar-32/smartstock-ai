@@ -1,0 +1,104 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.pyc
+.DS_Store
+
+# Project specific
+.env
+.env.local
+.env.*.local
+.env.*
+
+# Uploads and static files
+uploads/*
+!uploads/.gitkeep
+static/*
+!static/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Cache files
+.cache/
+*.cache
+
+# PaddlePaddle
+__model__
+__params__
+*.pdparams
+*.pdopt
+*.pdmodel
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.coverage.xml
+.nox/
+
+# Debug logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.*
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.pyc
+.DS_Store
