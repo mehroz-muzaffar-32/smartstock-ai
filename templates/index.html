@@ -7,6 +7,7 @@
     <!-- Using Tailwind CSS via CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+ 
 <body class="bg-gray-100">
     <!--Hamza Asif: Error Message Container (hidden by default) -->
     <!-- Positioned fixed at top-right corner -->
@@ -35,6 +36,27 @@
             </div>
         </div>
     </div>
+
+      <!-- Pure Tailwind Spinner Overlay -->
+      <div id="processingSpinner" class=" fixed inset-0 bg-gray-900/30 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl shadow-xl text-center max-w-xs w-full">
+            <!-- Animated Gradient Spinner (Pure Tailwind)
+            <div class="mx-auto mb-4 h-16 w-16 rounded-full 
+                        border-4 border-gray-200 border-t-blue-500 border-r-purple-500 
+                        animate-spin"></div> -->
+            
+            <p class="text-gray-800 font-medium text-lg">Processing Image</p>
+            <p class="text-gray-500 text-sm mt-2">Analyzing your inventory...</p>
+            
+            <!-- Optional: Animated dots (Pure Tailwind) -->
+            <div class="flex justify-center mt-4 space-x-1">
+                <div class="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                <div class="h-2 w-2 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                <div class="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Main Content Container -->
     <div class="container mx-auto px-4 py-8">
@@ -90,6 +112,9 @@
         // Form submission handler
         document.getElementById('uploadForm').addEventListener('submit', async function (e) {
             e.preventDefault();
+             
+            // Hamza Asif: Show spinner when processing starts
+            document.getElementById('processingSpinner').classList.remove('hidden');
             
             // Get DOM elements
             const resultsDiv = document.getElementById('results');
@@ -141,6 +166,10 @@
                 errorMessage.textContent = 'An error occurred while processing the image';
                 errorBox.classList.remove('hidden');
                 console.error('Error:', error);
+            }
+            finally {
+                // Hamza Asif: Hide spinner when done (in both success and error cases)
+                document.getElementById('processingSpinner').classList.add('hidden');
             }
         });
         
