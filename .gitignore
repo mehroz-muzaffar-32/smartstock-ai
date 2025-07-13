@@ -16,9 +16,12 @@ parts/
 sdist/
 var/
 wheels/
-instance
+instance/
 *.egg-info/
 .installed.cfg
+# Database
+*.db
+*.sqlite3
 *.egg
 
 

@@ -72,11 +72,11 @@ def upload():
         if not os.path.exists(filepath):
             return jsonify({'error': 'Failed to save file'}), 500
         
-        # Process image and generate suggestions
-        items = process_image(filepath)
+        # Process image through OCR
+        items, upload_id = process_image(filepath)
         if not items:
-            return jsonify({'error': 'No items detected'}), 400
-            
+            return jsonify({'error': 'No items found in image'}), 400
+        # Generate reorder suggestions from detected items
         reorder_suggestions = generate_reorder_suggestions(items)
         if not reorder_suggestions:
             return jsonify({'error': 'Failed to generate suggestions'}), 500
@@ -120,7 +120,13 @@ def upload():
 
 # Register blueprints
 from auth.routes import auth
+from inventory.routes import inventory
+
+# Register authentication blueprint
 app.register_blueprint(auth, url_prefix='/auth')
+
+# Register inventory blueprint
+app.register_blueprint(inventory, url_prefix='/inventory')
 
 if __name__ == '__main__':
     with app.app_context():
