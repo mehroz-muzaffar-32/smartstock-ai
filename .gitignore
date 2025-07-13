@@ -16,12 +16,14 @@ parts/
 sdist/
 var/
 wheels/
+instance/
 *.egg-info/
 .installed.cfg
 # Database
 *.db
 *.sqlite3
 *.egg
+
 
 # Virtual Environment
 .venv/

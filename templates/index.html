@@ -3,25 +3,19 @@
 {% block title %}SmartStock AI{% endblock %}
 
 {% block content %}
-    <!--Hamza Asif: Error Message Container (hidden by default) -->
-    <!-- Positioned fixed at top-right corner -->
+    <!-- Error Message Container -->
     <div id="errorBox" class="hidden fixed top-4 right-4 z-50 w-full max-w-md">
-        <!-- Error message card with fade-in animation -->
         <div class="animate-fade-in flex items-start bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-lg">
             <div class="flex-shrink-0">
-                <!-- Error icon -->
                 <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                 </svg>
             </div>
             <div class="ml-3">
-                <!-- Error title -->
                 <h3 class="text-sm font-medium text-red-800">Oops! Something went wrong</h3>
-                <!-- Dynamic error message will be inserted here -->
                 <div class="mt-2 text-sm text-red-700">
                     <p id="errorMessage"></p>
                 </div>
-                <!-- Dismiss button -->
                 <div class="mt-4">
                     <button type="button" class="dismiss-btn inline-flex items-center text-sm font-medium text-red-700 hover:text-red-600 focus:outline-none">
                         Dismiss
@@ -31,18 +25,11 @@
         </div>
     </div>
 
-      <!-- Pure Tailwind Spinner Overlay -->
-      <div id="processingSpinner" class=" fixed inset-0 bg-gray-900/30 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <!-- Processing Spinner -->
+    <div id="processingSpinner" class="hidden absolute inset-0 bg-gray-900/30 backdrop-blur-sm z-50 flex items-center justify-center">
         <div class="bg-white p-8 rounded-xl shadow-xl text-center max-w-xs w-full">
-            <!-- Animated Gradient Spinner (Pure Tailwind)
-            <div class="mx-auto mb-4 h-16 w-16 rounded-full 
-                        border-4 border-gray-200 border-t-blue-500 border-r-purple-500 
-                        animate-spin"></div> -->
-            
             <p class="text-gray-800 font-medium text-lg">Processing Image</p>
             <p class="text-gray-500 text-sm mt-2">Analyzing your inventory...</p>
-            
-            <!-- Optional: Animated dots (Pure Tailwind) -->
             <div class="flex justify-center mt-4 space-x-1">
                 <div class="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
                 <div class="h-2 w-2 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
@@ -51,22 +38,31 @@
         </div>
     </div>
 
-
-    <!-- Main Content Container -->
+   <!-- WhatsApp Confirmation -->
+<div id="whatsappConfirmation" class="hidden fixed inset-0 bg-gray-900/30 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div class="bg-white p-8 rounded-xl shadow-xl text-center max-w-xs w-full">
+        <div id="whatsappIconContainer" class="mx-auto mb-4 flex items-center justify-center h-16 w-16 rounded-full">
+            <!-- Icon will be inserted here by JavaScript -->
+        </div>
+        <p id="whatsappStatusTitle" class="text-gray-800 font-medium text-lg"></p>
+        <p id="whatsappStatusMessage" class="text-gray-500 text-sm mt-2"></p>
+        <button id="dismissWhatsappConfirmation" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm">
+            OK
+        </button>
+    </div>
+</div>
+    <!-- Main Content -->
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold text-center mb-8">SmartStock AI</h1>
         
-        <!-- Upload Form Card -->
         <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
             <form id="uploadForm" class="space-y-4">
-                <!-- Image Upload Field -->
                 <div class="space-y-2">
                     <label class="block text-sm font-medium text-gray-700">Upload Sales Register Image</label>
                     <input type="file" accept="image/*" name="image" id="imageInput" 
                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                 </div>
                 
-                <!-- WhatsApp Number Field -->
                 <div class="space-y-2">
                     <label class="block text-sm font-medium text-gray-700">Your WhatsApp Number</label>
                     <input type="tel" name="phone_number" id="phoneNumber" 
@@ -74,14 +70,12 @@
                            placeholder="Enter your WhatsApp number">
                 </div>
                 
-                <!-- Submit Button -->
                 <button type="submit" 
                         class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     Process Image
                 </button>
             </form>
 
-            <!-- Results Section (hidden by default) -->
             <div id="results" class="mt-8 hidden">
                 <h2 class="text-xl font-semibold mb-4">Results</h2>
                 <div class="overflow-x-auto">
@@ -94,7 +88,7 @@
                             </tr>
                         </thead>
                         <tbody id="resultsTableBody">
-                            <!-- Results will be dynamically inserted here -->
+                            <!-- Results will be inserted here -->
                         </tbody>
                     </table>
                 </div>
@@ -103,83 +97,134 @@
     </div>
 
     <script>
-        // Form submission handler
-        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
-             
-            // Hamza Asif: Show spinner when processing starts
-            document.getElementById('processingSpinner').classList.remove('hidden');
-            
-            // Get DOM elements
-            const resultsDiv = document.getElementById('results');
-            const tableBody = document.getElementById('resultsTableBody');
-            // Hamza Asif: Added errorBox and errorMessage
-            const errorBox = document.getElementById('errorBox');
-            const errorMessage = document.getElementById('errorMessage');
-            
-            //Hamza Asif: Hide previous error and results
-            errorBox.classList.add('hidden');
-            resultsDiv.classList.add('hidden');
-            
-            try {
-                // Create FormData from the form
-                const formData = new FormData(this);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize WhatsApp confirmation modal as hidden
+            const whatsappConfirmation = document.getElementById('whatsappConfirmation');
+            whatsappConfirmation.classList.add('hidden');
+    
+            // Form submission handler
+            document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
                 
-                // Send POST request to /upload endpoint
-                const response = await fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                });
+                // Show spinner
+                document.getElementById('processingSpinner').classList.remove('hidden');
+                document.getElementById('errorBox').classList.add('hidden');
+                document.getElementById('results').classList.add('hidden');
                 
-                // Parse JSON response
-                const data = await response.json();
+                try {
+                    const formData = new FormData(this);
+                    const response = await fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok || data.error) {
+                        throw new Error(data.error || 'Request failed');
+                    }
+                    
+                    // Display results
+                    const tableBody = document.getElementById('resultsTableBody');
+                    tableBody.innerHTML = '';
+                    
+                    data.reorder_suggestions.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.name}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.current_quantity}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.reorder_quantity}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                    
+                    document.getElementById('results').classList.remove('hidden');
+                    
+                    // Show WhatsApp confirmation if applicable
+                    if (data.whatsapp_status) {
+                        showWhatsappConfirmation(
+                            data.whatsapp_status === 'success',
+                            data.whatsapp_message || 
+                                (data.whatsapp_status === 'success' 
+                                    ? 'Reorder suggestions sent to your WhatsApp number' 
+                                    : 'Failed to send WhatsApp notification')
+                        );
+                    }
+                    
+                } catch (error) {
+                    document.getElementById('errorMessage').textContent = error.message;
+                    document.getElementById('errorBox').classList.remove('hidden');
+                    console.error('Error:', error);
+                } finally {
+                    document.getElementById('processingSpinner').classList.add('hidden');
+                }
+            });
+    
+            function showWhatsappConfirmation(success, message) {
+                const confirmation = document.getElementById('whatsappConfirmation');
+                const title = document.getElementById('whatsappStatusTitle');
+                const statusMessage = document.getElementById('whatsappStatusMessage');
+                const iconContainer = document.getElementById('whatsappIconContainer');
                 
-                // Handle error response
-                if (data.error) {
-                    errorMessage.textContent = data.error;
-                    errorBox.classList.remove('hidden');
+                if (!confirmation || !title || !statusMessage || !iconContainer) {
+                    console.error('Could not find all WhatsApp confirmation elements');
                     return;
                 }
                 
-                // Display results if successful
-                tableBody.innerHTML = '';
-                data.reorder_suggestions.forEach(suggestion => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${suggestion.name}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${suggestion.current_quantity}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${suggestion.reorder_quantity}</td>
+                // Set title and message
+                title.textContent = success ? 'Message Sent' : 'Message Failed';
+                statusMessage.textContent = message;
+                
+                // Set appropriate styles and icon
+                if (success) {
+                    title.classList.remove('text-red-500');
+                    title.classList.add('text-green-500');
+                    iconContainer.className = 'mx-auto mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-green-100';
+                    iconContainer.innerHTML = `
+                        <svg class="h-10 w-10 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
                     `;
-                    tableBody.appendChild(row);
-                });
+                } else {
+                    title.classList.remove('text-green-500');
+                    title.classList.add('text-red-500');
+                    iconContainer.className = 'mx-auto mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-red-100';
+                    iconContainer.innerHTML = `
+                        <svg class="h-10 w-10 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    `;
+                }
                 
-                resultsDiv.classList.remove('hidden');
+                // Show the modal
+                confirmation.classList.remove('hidden');
                 
-            } catch (error) {
-                // Handle network errors
-                errorMessage.textContent = 'An error occurred while processing the image';
-                errorBox.classList.remove('hidden');
-                console.error('Error:', error);
+                // Auto-dismiss after 5 seconds
+                setTimeout(() => {
+                    if (confirmation && !confirmation.classList.contains('hidden')) {
+                        confirmation.classList.add('hidden');
+                    }
+                }, 5000);
             }
-            finally {
-                // Hamza Asif: Hide spinner when done (in both success and error cases)
-                document.getElementById('processingSpinner').classList.add('hidden');
-            }
-        });
-        
-        //Hamza Asif: Dismiss button functionality
-        document.querySelectorAll('.dismiss-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.getElementById('errorBox').classList.add('hidden');
+    
+            // Dismiss buttons
+            document.querySelector('.dismiss-btn')?.addEventListener('click', () => {
+                document.getElementById('errorBox')?.classList.add('hidden');
             });
-        });
-        
-        //Hamza Asif: Auto-dismiss error after 5 seconds
-        setTimeout(() => {
+            
+            document.getElementById('dismissWhatsappConfirmation')?.addEventListener('click', () => {
+                document.getElementById('whatsappConfirmation')?.classList.add('hidden');
+            });
+    
+            // Auto-dismiss error if present
             const errorBox = document.getElementById('errorBox');
             if (errorBox && !errorBox.classList.contains('hidden')) {
-                errorBox.classList.add('hidden');
+                setTimeout(() => {
+                    if (errorBox && !errorBox.classList.contains('hidden')) {
+                        errorBox.classList.add('hidden');
+                    }
+                }, 5000);
             }
-        }, 5000);
+        });
     </script>
 {% endblock %}
