@@ -59,7 +59,7 @@ class OCRProcessor:
             cv2.imwrite(temp_file, preprocessed_image)
             
             # Run OCR on processed image
-            result = self.ocr.ocr(temp_file, cls=True)
+            result = self.ocr.ocr(temp_file, cls=False)
             
             # Clean up temporary file
             if os.path.exists(temp_file):
